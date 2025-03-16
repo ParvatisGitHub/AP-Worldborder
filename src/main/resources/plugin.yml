@@ -1,0 +1,60 @@
+name: WorldBorder
+version: '5.3.0-SNAPSHOT'
+main: com.psg.worldborder.WorldBorderPlugin
+api-version: '1.21'
+commands:
+  crafttp:
+    description: Teleport your craft to specific coordinates
+    usage: /crafttp <x> <y> <z>
+    permission: apworldborder.crafttp
+  bordershape:
+    description: Set The worldborder shape between rectangular and circular
+    usage: /bordershape <shape>
+    permission: apworldborder.bordershape
+  bordercenter:
+    description: Set the center coordinates of the worldborder
+    usage: /bordercenter <x> <z>
+    permission: apworldborder.bordercenter
+  borderradius:
+    description: Set the radius of the worldborder for circular shapes
+    usage: /borderradius <radius>
+    permission: apworldborder.borderradius
+  borderwidth:
+    description: Set the width of the worldborder for rectangular shapes
+    usage: /borderwidth <width>
+    permission: apworldborder.borderwidth
+  borderlength:
+    description: Set the length of the worldborder for rectangular shapes
+    usage: /borderlength <length>
+    permission: apworldborder.borderlength
+  borderwrapping:
+    description: Turns on or off worldborder wrapping for crafts
+    usage: /borderwrapping <on>
+    permission: apworldborder.borderwrapping
+  borderwrappingx:
+    description: Turns on or off X axis worldborder wrapping
+    usage: /borderwrappingx <on>
+    permission: apworldborder.borderwrappingx
+  borderwrappingz:
+    description: Turns on or off Z axis worldborder wrapping
+    usage: /borderwrappingZ <on>
+    permission: apworldborder.borderwrappingZ
+  borderpushback:
+    description: Sets the worldborder pushback when you hit the border
+    usage: /borderpushback <pushback>
+    permission: apworldborder.borderpushback
+  borderdebug:
+    description: Turns on or off debug mode
+    usage: /borderdebug <on>
+    permission: apworldborder.borderdebug
+  bordercooldowntime:
+    description: Sets the cooldown time for players crossing the worldborder when wrapping is on
+    usage: /bordercooldowntime <time>
+    permission: apworldborder.bordercooldowntime
+  bordercooldownmessage:
+    description: Sets the cooldown message when players hit the border while under cooldown, use %time% to get cooldown time for message
+    usage: /bordercooldownmessage <message>
+    permission: apworldborder.bordercooldownmessage
+depend: [Movecraft]
+description: Configurable world border plugin with Movecraft integration
+author: ParvatisGitHub

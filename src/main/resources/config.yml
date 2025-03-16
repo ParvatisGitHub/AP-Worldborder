@@ -1,0 +1,34 @@
+# WorldBorder Configuration
+
+border:
+  # Border shape: CIRCULAR or RECTANGULAR
+  shape: CIRCULAR
+  
+  # Border center coordinates
+  center:
+    x: 0
+    z: 0
+  
+  # Border size
+  size:
+    # For circular border
+    radius: 1000
+    # For rectangular border
+    width: 2000
+    height: 2000
+  
+  # Wrapping settings
+  wrapping:
+    enabled: true
+    x-axis: true
+    z-axis: true
+  
+  # Distance to push back when wrapping is disabled
+  pushback-distance: 10
+
+  # Debug Mod
+  debugMode: true
+
+  cooldown:
+    time: 5  # Time in seconds between border crossings
+    message: "§cYou must wait %time% seconds before crossing the border again!"
