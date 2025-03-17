@@ -17,6 +17,7 @@ Change cooldown time and message for going across the border
 Change world interaction settings like enderpearling, player boats or minecarts, and block placement over the border
 Can change how far your craft is pushed back from the border
 Can give players a different border than movecraft ships with the player leeway setting
+
 COMMANDS:
 /bordercenter: Set the center coordinates of the worldborder
 /borderwrappingz: Turns on or off Z axis worldborder wrapping
