@@ -21,6 +21,10 @@ public class BorderConfig {
     private final boolean debugMode;
     private final int cooldownTime;
     private final String cooldownMessage;
+    private final boolean denyEnderpearl;
+    private final boolean denyBlockPlace;
+    private final boolean denyVehicles;
+    private final int playerLeeway;
 
     public static BorderConfig fromConfig(final FileConfiguration config) {
         return new BorderConfig(
@@ -36,8 +40,11 @@ public class BorderConfig {
             config.getDouble("border.pushback-distance", 10.0),
             config.getBoolean("border.debugMode.enabled", true),
             config.getInt("border.cooldown.time", 5),
-            config.getString("border.cooldown.message",
-                    "§cYou must wait %time% seconds before crossing the border again!")
+            config.getString("border.cooldown.message", "§cYou must wait %time% seconds before crossing the border again!"),
+            config.getBoolean("border.denyEnderpearl", true),
+            config.getBoolean("border.denyBlockPlace", true),
+            config.getBoolean("border.denyVehicles", true),
+            config.getInt("border.playerLeeway", 50)
         );
     }
 }

@@ -55,6 +55,22 @@ commands:
     description: Sets the cooldown message when players hit the border while under cooldown, use %time% to get cooldown time for message
     usage: /bordercooldownmessage <message>
     permission: apworldborder.bordercooldownmessage
+  borderdenyenderpearl:
+    description: Toggles ender pearl denial over border
+    usage: /borderdenyenderpearl <True or False>
+    permission: apworldborder.borderdenyenderpearl
+  borderdenyvehicles:
+    description: Toggles riding vehicles like boats or minecarts through the border
+    usage: /borderdenyvehicles <True or False>
+    permission: apworldborder.borderdenyvehicles
+  borderdenyblockplace:
+    description: Toggles block placing outside the border
+    usage: /borderdenyblockplace <True or False>
+    permission: apworldborder.borderdenyblockplace
+  borderplayerleeway:
+    description: Sets the leeway for how much further a player can go out of the border than a movecraft craft
+    usage: /borderplayerleeway <Int>
+    permission: apworldborder.borderplayerleeway
 depend: [Movecraft]
 description: Configurable world border plugin with Movecraft integration
 author: ParvatisGitHub

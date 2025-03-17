@@ -32,3 +32,8 @@ border:
   cooldown:
     time: 5  # Time in seconds between border crossings
     message: "§cYou must wait %time% seconds before crossing the border again!"
+
+  denyEnderpearl: true
+  denyBlockPlace: true
+  denyVehicles: true
+  playerLeeway: 50
