@@ -11,13 +11,19 @@ import net.countercraft.movecraft.MovecraftLocation;
 import net.countercraft.movecraft.events.CraftTranslateEvent;
 import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.craft.CraftManager;
-import com.psg.worldborder.CraftBorderHandler;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.entity.Player;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Comparator;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 @RequiredArgsConstructor
 public class CraftMoveListener implements Listener {
@@ -25,6 +31,12 @@ public class CraftMoveListener implements Listener {
     private final WorldBorderPlugin plugin;
     @NotNull
     private final CraftBorderHandler borderHandler;
+    @NotNull
+    private final Set<Craft> crafts = new ConcurrentSkipListSet<>(Comparator.comparingInt(Object::hashCode));
+    @NotNull
+    private final ConcurrentMap<Player, PlayerCraft> playerCrafts = new ConcurrentHashMap<>();
+    @NotNull
+    private final ConcurrentMap<Craft, BukkitTask> releaseEvents = new ConcurrentHashMap<>();
 
     @EventHandler
     public void onCraftMove(final CraftTranslateEvent event) {
@@ -53,10 +65,10 @@ public class CraftMoveListener implements Listener {
         if (this.plugin.getBorderManager().isOutsideBorder(midPoint)) {
             if (this.plugin.getBorderCooldownManager().isOnCooldown(player)) {
 
-                // Stop cruising if the craft is cruising
+                // Stop the craft from cruising and release it
                 if (craft.getCruising()) {
                     craft.setCruising(false);
-                    player.sendMessage("§eCraft cruise disabled due to border cooldown.");
+                    player.sendMessage("Craft cruise disabled due to border collision");
                 }
                 // Get pushback location
                 final MovecraftLocation pushbackLocation = this.plugin.getBorderManager().getPushbackLocation(midPoint);
@@ -67,11 +79,6 @@ public class CraftMoveListener implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            // Stop cruising if the craft is cruising
-                            if (craft.getCruising()) {
-                                craft.setCruising(false);
-                                player.sendMessage("§eCraft cruise disabled due to border cooldown.");
-                            }
                             int dx = pushbackLocation.getX() - midPoint.getX();
                             int dy = 0; // Keep the same Y level
                             int dz = pushbackLocation.getZ() - midPoint.getZ();

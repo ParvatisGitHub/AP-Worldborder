@@ -6,32 +6,32 @@ import com.psg.worldborder.CraftTeleporter;
 import lombok.RequiredArgsConstructor;
 import net.countercraft.movecraft.MovecraftLocation;
 import net.countercraft.movecraft.craft.Craft;
+import net.countercraft.movecraft.craft.PlayerCraft;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Comparator;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 @RequiredArgsConstructor
 public class CraftBorderHandler {
     private final WorldBorderPlugin plugin;
     private static final int BORDER_BUFFER = 50; // Buffer distance from border in blocks
+    @NotNull private final Set<Craft> crafts = new ConcurrentSkipListSet<>(Comparator.comparingInt(Object::hashCode));
+    @NotNull private final ConcurrentMap<Player, PlayerCraft> playerCrafts = new ConcurrentHashMap<>();
 
     public void handleBorderCrossing(Craft craft, Player player, MovecraftLocation midPoint) {
 
-        // Stop the craft from cruising if it is
-        if (craft.getCruising()) {
-            craft.setCruising(false);
-            player.sendMessage("§eCraft cruise disabled due to border crossing.");
-        }
         // Check cooldown
         if (this.plugin.getBorderCooldownManager().isOnCooldown(player)) {
             long remainingTime = this.plugin.getBorderCooldownManager().getRemainingCooldown(player);
             String message = this.plugin.getConfigManager().getBorderConfig().getCooldownMessage()
                     .replace("%time%", String.format("%.1f", remainingTime / 1000.0));
             player.sendMessage(message);
-            // Stop the craft from cruising if it is
-            if (craft.getCruising()) {
-                craft.setCruising(false);
-                player.sendMessage("§eCraft cruise disabled due to border crossing.");
-            }
             return;
         }
 
@@ -71,11 +71,6 @@ public class CraftBorderHandler {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    // Stop cruising if the craft is cruising
-                    if (craft.getCruising()) {
-                        craft.setCruising(false);
-                        player.sendMessage("§eCraft cruise disabled due to border cooldown.");
-                    }
                     CraftTeleporter.teleportCraft(craft, player, safeLocation.getX(), safeLocation.getY(), safeLocation.getZ());
                 }
             }.runTask(this.plugin);
@@ -90,11 +85,6 @@ public class CraftBorderHandler {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    // Stop cruising if the craft is cruising
-                    if (craft.getCruising()) {
-                        craft.setCruising(false);
-                        player.sendMessage("§eCraft cruise disabled due to border cooldown.");
-                    }
                     CraftTeleporter.teleportCraft(craft, player, safeLocation.getX(), safeLocation.getY(), safeLocation.getZ());
                 }
             }.runTask(this.plugin);
