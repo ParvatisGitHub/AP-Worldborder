@@ -4,6 +4,10 @@ import com.psg.worldborder.config.BorderConfig;
 import com.psg.worldborder.config.ConfigManager;
 import com.psg.worldborder.border.BorderManager;
 import com.psg.worldborder.border.BorderCooldownManager;
+import com.psg.worldborder.listener.PlayerMoveListener;
+import com.psg.worldborder.VehicleBorderHandler;
+import com.psg.worldborder.listener.BorderInteractionListener;
+import com.psg.worldborder.listener.CraftPilotListener;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.psg.worldborder.commands.*;
@@ -29,7 +33,16 @@ public final class WorldBorderPlugin extends JavaPlugin {
     private CraftBorderHandler borderHandler;
 
     @Getter
+    private PlayerBorderHandler playerBorderHandler;
+
+    @Getter
     private BorderCooldownManager borderCooldownManager;
+
+    @Getter
+    private BorderInteractionListener borderInteractionListener;
+
+    @Getter
+    private VehicleBorderHandler vehicleBorderHandler;
 
     @Override
     public void onEnable() {
@@ -43,12 +56,23 @@ public final class WorldBorderPlugin extends JavaPlugin {
 
         this.borderManager = new BorderManager(this);
 
+        this.vehicleBorderHandler = new VehicleBorderHandler(this);
+
+        this.borderInteractionListener = new BorderInteractionListener(this, this.vehicleBorderHandler);
+
         BorderConfig borderConfig = BorderConfig.fromConfig(this.getConfig());
         this.borderHandler = new CraftBorderHandler(this);
+        this.playerBorderHandler = new PlayerBorderHandler(this);
 
         // Register listeners
         this.getServer().getPluginManager().registerEvents(
-            new CraftMoveListener(this, this.borderHandler), this);
+                new CraftMoveListener(this, this.borderHandler), this);
+        this.getServer().getPluginManager().registerEvents(
+                new PlayerMoveListener(this, this.playerBorderHandler), this);
+        this.getServer().getPluginManager().registerEvents(
+                new BorderInteractionListener(this, this.vehicleBorderHandler), this);
+        this.getServer().getPluginManager().registerEvents(
+                new CraftPilotListener(this), this);
 
         // Register commands and tab completers
         getCommand("crafttp").setExecutor(new CraftTeleportCommand(this));
@@ -73,6 +97,11 @@ public final class WorldBorderPlugin extends JavaPlugin {
         getCommand("bordercooldowntime").setExecutor(new BorderCooldownTimeCommand(this));
         getCommand("bordercooldownmessage").setExecutor(new BorderCooldownMessageCommand(this));
 
+        //Add new commands
+        getCommand("borderdenyblockplace").setExecutor(new BorderBlockPlaceCommand(this));
+        getCommand("borderdenyenderpearl").setExecutor(new BorderDenyEnderpearlCommand(this));
+        getCommand("borderdenyvehicles").setExecutor(new BorderDenyVehiclesCommand(this));
+        getCommand("borderplayerleeway").setExecutor(new BorderPlayerLeewayCommand(this));
         this.getLogger().info("WorldBorder plugin has been enabled!");
     }
 
